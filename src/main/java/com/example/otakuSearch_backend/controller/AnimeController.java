@@ -3,9 +3,7 @@ package com.example.otakuSearch_backend.controller;
 import com.example.otakuSearch_backend.service.AniListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
@@ -34,30 +32,23 @@ public class AnimeController {
     /**
      * Endpoint to fetch popular anime for the current season.
      * 
-     * @param season The current anime season (e.g., "WINTER", "SPRING", "SUMMER", "FALL").
-     * @param year The year of the season.
      * @return A Mono containing a Map with popular anime data for the given season and year.
      */
     @GetMapping("/popular")
-    public Mono<Map<String, Object>> getPopularThisSeason(
-            @RequestParam String season,
-            @RequestParam int year) {
-        return aniListService.getPopularThisSeason(season, year);
+    public Mono<Map<String, Object>> getPopularThisSeason() {
+        return aniListService.getPopularThisSeason();
     }
 
     /**
      * Endpoint to fetch upcoming anime for the next season.
-     * 
-     * @param season The upcoming anime season (e.g., "WINTER", "SPRING", "SUMMER", "FALL").
-     * @param year The year of the upcoming season.
-     * @return A Mono containing a Map with upcoming anime data.
+     *
+     * @return A Mono containing a Map with popular anime data for the given season and year.
      */
     @GetMapping("/upcoming")
-    public Mono<Map<String, Object>> getUpcomingNextSeason(
-            @RequestParam String season,
-            @RequestParam int year) {
-        return aniListService.getUpcomingNextSeason(season, year);
+    public Mono<Map<String, Object>> getUpcomingNextSeason() {
+        return aniListService.getUpcomingNextSeason();
     }
+    
 
     /**
      * Endpoint to fetch all-time popular anime.

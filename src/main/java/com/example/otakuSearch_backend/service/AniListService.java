@@ -1,6 +1,7 @@
 package com.example.otakuSearch_backend.service;
 
 import org.springframework.stereotype.Service;
+import com.example.otakuSearch_backend.util.AnimeSeasonUtil;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import org.springframework.core.ParameterizedTypeReference;
@@ -45,7 +46,11 @@ public class AniListService {
 
 
       // fetch all popular anime this season
-      public Mono<Map<String, Object>> getPopularThisSeason(String season, int year) {
+      public Mono<Map<String, Object>> getPopularThisSeason() {
+
+      // Dynamically calculate the CURRRENT season and year
+      String season = AnimeSeasonUtil.getCurrentSeason();
+      int year = AnimeSeasonUtil.getCurrentYear();
 
         // GraphQL Query to retrive the popular animes this season
         String query = """
@@ -63,28 +68,34 @@ public class AniListService {
               }
             }
         """;
+        System.out.println("Fetching popular anime for season: " + season + ", year: " + year);
         return fetchAnime(query, Map.of("season", season, "year", year));
     }
 
     // fetch upcoming anime next season
-    public Mono<Map<String, Object>> getUpcomingNextSeason(String season, int year) {
+    public Mono<Map<String, Object>> getUpcomingNextSeason() {
+
+      // Dynamically calculate the upcoming season and year
+      String season = AnimeSeasonUtil.getUpcomingSeason(AnimeSeasonUtil.getUpcomingYear());
+      int year = AnimeSeasonUtil.getUpcomingYear();
 
       // GraphQL to query the upcoming animes for next season
       String query = """
-          query ($season: MediaSeason, $year: Int) {
-            Page(page: 1, perPage: 6) {
-              media(season: $season, seasonYear: $year, sort: POPULARITY_DESC, type: ANIME) {
-                id
-                title {
-                  romaji
-                  english
-                }
-                episodes
-                status
+        query ($season: MediaSeason, $year: Int) {
+          Page(page: 1, perPage: 6) {
+            media(season: $season, seasonYear: $year, sort: POPULARITY_DESC, type: ANIME) {
+              id
+              title {
+                romaji
+                english
               }
+              episodes
+              status
             }
           }
+        }
       """;
+      System.out.println("Fetching upcoming anime for season: " + season + ", year: " + year);
       return fetchAnime(query, Map.of("season", season, "year", year));
   }
 

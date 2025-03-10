@@ -20,6 +20,10 @@ About: Full-stack iOS mobile application that allows for users to search for the
 ```gradle wrapper```
 ```./gradlew build```
 
+### Run the Server with:
+```./gradlew bootRun```
+
+
 ### CD into your backend directory project if you haven't
 ```spring init --name=otakuSearch-backend --dependencies=web,graphql,cache,data-redis --type=gradle-project otakuSearch-backend```
 This initializes the project
