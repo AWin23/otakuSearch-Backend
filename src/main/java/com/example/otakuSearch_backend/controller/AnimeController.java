@@ -41,7 +41,6 @@ public class AnimeController {
 
     /**
      * Endpoint to fetch upcoming anime for the next season.
-     *
      * @return A Mono containing a Map with popular anime data for the given season and year.
      */
     @GetMapping("/upcoming")
@@ -49,10 +48,8 @@ public class AnimeController {
         return aniListService.getUpcomingNextSeason();
     }
     
-
     /**
      * Endpoint to fetch all-time popular anime.
-     * 
      * @return A Mono containing a Map with a list of all-time popular anime.
      */
     @GetMapping("/all-time-popular")
@@ -62,7 +59,6 @@ public class AnimeController {
 
     /**
      * Endpoint to fetch the top 100 anime of all time.
-     * 
      * @return A Mono containing a Map with the top 100 anime.
      */
     @GetMapping("/top100")

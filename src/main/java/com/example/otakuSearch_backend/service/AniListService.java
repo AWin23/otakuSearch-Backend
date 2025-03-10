@@ -2,27 +2,17 @@ package com.example.otakuSearch_backend.service;
 
 import org.springframework.stereotype.Service;
 import com.example.otakuSearch_backend.util.AnimeSeasonUtil;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import org.springframework.core.ParameterizedTypeReference;
 import java.util.Map;
 
 @Service
 public class AniListService {
-    private final WebClient webClient;
+  private final AniListGraphQLService graphQLService;
 
-    // connects the imported web client to here
-    public AniListService(WebClient.Builder webClientBuilder) {
-      this.webClient = webClientBuilder.build();
-  }
-
-  // functiont to fetch the anime via POST request of webClient
-  private Mono<Map<String, Object>> fetchAnime(String query, Map<String, Object> variables) {
-      return webClient.post()
-              .bodyValue(Map.of("query", query, "variables", variables))
-              .retrieve()
-              .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {});
-  }
+  public AniListService(AniListGraphQLService graphQLService) {
+    
+      this.graphQLService = graphQLService;
+    }
 
       // GraphQL Query to retrive trending anime
       public Mono<Map<String, Object>> getTrendingAnime() {
@@ -41,7 +31,7 @@ public class AniListService {
                 }
               }
           """;
-          return fetchAnime(query, Map.of());
+          return graphQLService.executeQuery(query, Map.of());
       }
 
 
@@ -69,7 +59,7 @@ public class AniListService {
             }
         """;
         System.out.println("Fetching popular anime for season: " + season + ", year: " + year);
-        return fetchAnime(query, Map.of("season", season, "year", year));
+        return graphQLService.executeQuery(query, Map.of("season", season, "year", year));
     }
 
     // fetch upcoming anime next season
@@ -96,7 +86,7 @@ public class AniListService {
         }
       """;
       System.out.println("Fetching upcoming anime for season: " + season + ", year: " + year);
-      return fetchAnime(query, Map.of("season", season, "year", year));
+      return graphQLService.executeQuery(query, Map.of("season", season, "year", year));
   }
 
 
@@ -119,7 +109,7 @@ public class AniListService {
           }
         }
     """;
-    return fetchAnime(query, Map.of());
+    return graphQLService.executeQuery(query, Map.of());
 }
 
 
@@ -143,7 +133,7 @@ public Mono<Map<String, Object>> getTop100Anime() {
           }
         }
     """;
-    return fetchAnime(query, Map.of());
+    return graphQLService.executeQuery(query, Map.of());
   }
 
 }
