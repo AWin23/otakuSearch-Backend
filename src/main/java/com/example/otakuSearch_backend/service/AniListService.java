@@ -27,6 +27,9 @@ public class AniListService {
                     }
                     episodes
                     status
+                    coverImage {
+                    medium
+                    }
                   }
                 }
               }
@@ -54,6 +57,9 @@ public class AniListService {
                   }
                   episodes
                   status
+                  coverImage {
+                  medium
+                  }
                 }
               }
             }
@@ -81,6 +87,9 @@ public class AniListService {
               }
               episodes
               status
+              coverImage {
+              medium
+              }
             }
           }
         }
@@ -105,6 +114,9 @@ public class AniListService {
               }
               episodes
               status
+              coverImage {
+              medium
+              }
             }
           }
         }
@@ -129,6 +141,9 @@ public Mono<Map<String, Object>> getTop100Anime() {
               episodes
               status
               averageScore
+              coverImage { 
+              medium
+              }
             }
           }
         }
