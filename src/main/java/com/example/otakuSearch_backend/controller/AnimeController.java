@@ -3,6 +3,7 @@ package com.example.otakuSearch_backend.controller;
 import com.example.otakuSearch_backend.service.AniListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
@@ -64,6 +65,17 @@ public class AnimeController {
     @GetMapping("/top100")
     public Mono<Map<String, Object>> getTop100Anime() {
         return aniListService.getTop100Anime();
+    }
+
+
+    /**
+     * Endpoint to fetch specific anime from AniList API based on ID.
+     * @param id The ID of the anime.
+     * @return A Mono containing a Map with detailed anime data.
+     */
+    @GetMapping("/{id}")
+    public Mono<Map<String, Object>> getSpecificAnime(@PathVariable int id) {
+        return aniListService.getSpecificAnime(id);
     }
 }
 

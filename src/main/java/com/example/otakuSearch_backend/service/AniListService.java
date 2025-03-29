@@ -28,7 +28,7 @@ public class AniListService {
                     episodes
                     status
                     coverImage {
-                    medium
+                    large
                     }
                   }
                 }
@@ -58,7 +58,7 @@ public class AniListService {
                   episodes
                   status
                   coverImage {
-                  medium
+                  large
                   }
                 }
               }
@@ -88,7 +88,7 @@ public class AniListService {
               episodes
               status
               coverImage {
-              medium
+              large
               }
             }
           }
@@ -115,12 +115,13 @@ public class AniListService {
               episodes
               status
               coverImage {
-              medium
+              large
               }
             }
           }
         }
     """;
+    System.out.println("Fetching All-time anime for season: ");
     return graphQLService.executeQuery(query, Map.of());
 }
 
@@ -142,13 +143,62 @@ public Mono<Map<String, Object>> getTop100Anime() {
               status
               averageScore
               coverImage { 
-              medium
+              large
               }
             }
           }
         }
     """;
     return graphQLService.executeQuery(query, Map.of());
+  }
+
+  // fetch the specific anime details based off ID
+  public Mono<Map<String, Object>> getSpecificAnime(int id) {
+
+    String query = """
+      query ($id: Int) {
+        Media(id: $id, type: ANIME) {
+          id
+          title {
+            romaji
+            english
+            native
+          }
+          description
+          type
+          episodes
+          duration
+          season
+          seasonYear
+          favourites
+          status
+          studios {
+            edges {
+              node {
+                name
+              }
+            }
+          }
+          genres
+          tags {
+            name
+          }
+          nextAiringEpisode {
+            episode
+            timeUntilAiring
+          }
+          coverImage {
+            medium
+            large
+          }
+        }
+      }
+    """;
+
+    System.out.println("Fetching Specific Anime Details: ");
+
+    // GraphQL query to get specific anime details based off id
+    return graphQLService.executeQuery(query, Map.of("id", id)); 
   }
 
 }
