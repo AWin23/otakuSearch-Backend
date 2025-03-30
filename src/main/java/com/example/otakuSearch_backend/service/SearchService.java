@@ -40,20 +40,24 @@ public class SearchService {
 
     // GraphQL query with parameters as placeholders
     String query = """
-        query ($search: String, $genre: String, $season: MediaSeason, $year: Int, $status: MediaStatus) {
-          Page(page: 1, perPage: 10) {
-            media(search: $search, genre: $genre, season: $season, seasonYear: $year, status: $status, type: ANIME) {
-              id
-              title {
-                romaji
-                english
-              }
-              episodes
-              status
-              genres
+      query ($search: String, $genre: String, $season: MediaSeason, $year: Int, $status: MediaStatus) {
+        Page(page: 1, perPage: 10) {
+          media(search: $search, genre: $genre, season: $season, seasonYear: $year, status: $status, type: ANIME) {
+            id
+            title {
+              romaji
+              english
+            }
+            episodes
+            status
+            genres
+            coverImage {
+              medium
+              large
             }
           }
         }
+      }
     """;
 
     // Log the query for debugging
