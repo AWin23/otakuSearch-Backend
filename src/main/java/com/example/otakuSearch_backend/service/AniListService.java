@@ -1,6 +1,7 @@
 package com.example.otakuSearch_backend.service;
 
 import org.springframework.stereotype.Service;
+import org.jsoup.Jsoup;
 import com.example.otakuSearch_backend.util.AnimeSeasonUtil;
 import reactor.core.publisher.Mono;
 import java.util.Map;
@@ -197,8 +198,22 @@ public Mono<Map<String, Object>> getTop100Anime() {
 
     System.out.println("Fetching Specific Anime Details: ");
 
-    // GraphQL query to get specific anime details based off id
-    return graphQLService.executeQuery(query, Map.of("id", id)); 
+    return graphQLService.executeQuery(query, Map.of("id", id))
+    .map(result -> {
+        Map<String, Object> data = (Map<String, Object>) result.get("data");
+        if (data != null && data.get("Media") instanceof Map) {
+            Map<String, Object> media = (Map<String, Object>) data.get("Media");
+
+            // ✅ Sanitize the HTML from description field
+            if (media.containsKey("description") && media.get("description") instanceof String) {
+                String rawDescription = (String) media.get("description");
+                String cleanText = Jsoup.parse(rawDescription).text();
+                media.put("description", cleanText);
+            }
+        }
+
+        return result;
+    });
   }
 
 }

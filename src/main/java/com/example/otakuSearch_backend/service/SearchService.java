@@ -62,7 +62,5 @@ public class SearchService {
 
     // Execute GraphQL request and return results
     return graphQLService.executeQuery(query, filters);
-}
-
-    
+  }
 }
