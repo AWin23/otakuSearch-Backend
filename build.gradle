@@ -28,6 +28,9 @@ dependencies {
 
     implementation 'org.jsoup:jsoup:1.17.2'
 
+    // password encrypter
+    implementation 'org.springframework.security:spring-security-crypto'
+
     
     // GraphQL dependencies
     implementation 'com.graphql-java:graphql-java'
@@ -50,4 +53,3 @@ dependencies {
 test {
     useJUnitPlatform()
 }
-

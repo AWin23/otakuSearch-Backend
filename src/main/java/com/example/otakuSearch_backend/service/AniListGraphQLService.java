@@ -20,7 +20,10 @@ public class AniListGraphQLService {
      * @param webClientBuilder WebClient.Builder instance for configuring HTTP requests.
      */
     public AniListGraphQLService(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.build();
+        this.webClient = webClientBuilder
+                .baseUrl("https://graphql.anilist.co")
+                .defaultHeader("Content-Type", "application/json")
+                .build();
     }
 
     /**
