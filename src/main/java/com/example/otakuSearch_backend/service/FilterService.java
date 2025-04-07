@@ -111,6 +111,9 @@ public class FilterService {
                         status
                         genres
                         averageScore
+                        coverImage {
+                        large
+                        }
                     }
                 }
             }
