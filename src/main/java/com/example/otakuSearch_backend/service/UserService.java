@@ -54,4 +54,11 @@ public class UserService {
 
         return match;
     }
+
+    // fetches the user in the database by ID
+    public Users getUserById(Long userId) {
+        return userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("❌ User not found with ID: " + userId));
+    }
+    
 }

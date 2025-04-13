@@ -2,8 +2,13 @@ package com.example.otakuSearch_backend.controller;
 
 import com.example.otakuSearch_backend.models.Users;
 import com.example.otakuSearch_backend.service.UserService;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import java.util.Optional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,22 +28,21 @@ public class UserAccountController {
 
     // ✅ Secure Login using password hashing
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody Users user) {
-        return userService.getUserByEmail(user.getEmail())
-                .map(existing -> {
-                    // Use bcrypt comparison instead of plain .equals()
-                    if (userService.checkPassword(user.getPassword(), existing.getPassword())) {
-                        System.out.println("✅ Login successful for: " + user.getEmail());
-                        return ResponseEntity.ok("Login success");
-                    } else {
-                        System.out.println("❌ Invalid password for: " + user.getEmail());
-                        return ResponseEntity.status(401).body("Invalid credentials");
-                    }
-                })
-                .orElseGet(() -> {
-                    System.out.println("❌ User not found: " + user.getEmail());
-                    return ResponseEntity.status(404).body("User not found");
-                });
-        }
-
+    public ResponseEntity<Object> loginUser(@RequestBody Users user) {
+        Optional<Users> optionalUser = userService.getUserByEmail(user.getEmail());
+    
+        return optionalUser
+            .<ResponseEntity<Object>>map(existing -> {
+                if (userService.checkPassword(user.getPassword(), existing.getPassword())) {
+                    Map<String, Object> response = new HashMap<>();
+                    response.put("userId", existing.getUserId());
+                    response.put("email", existing.getEmail());
+                    return ResponseEntity.ok(response);
+                } else {
+                    return ResponseEntity.status(401).body(Map.of("error", "Invalid credentials"));
+                }
+            })
+            .orElseGet(() -> ResponseEntity.status(404).body(Map.of("error", "User not found")));
     }
+}
+    

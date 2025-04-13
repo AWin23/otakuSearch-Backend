@@ -16,20 +16,28 @@ public class Favorites {
     private Users user;
 
     @Column(nullable = false)
-    private Long animeId; // Store anime ID
+    private Long animeId;
 
-    @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(nullable = false, length = 100)
+    private String title;
+
+    @Column(name = "cover_image_url", nullable = false, length = 255)
+    private String coverImageUrl;
+
+    @Column(nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     // Constructors
     public Favorites() {}
 
-    public Favorites(Users user, Long animeId) {
+    public Favorites(Users user, Long animeId, String title, String coverImageUrl) {
         this.user = user;
         this.animeId = animeId;
+        this.title = title;
+        this.coverImageUrl = coverImageUrl;
     }
 
     // Getters and Setters
@@ -41,6 +49,12 @@ public class Favorites {
 
     public Long getAnimeId() { return animeId; }
     public void setAnimeId(Long animeId) { this.animeId = animeId; }
+
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+
+    public String getCoverImageUrl() { return coverImageUrl; }
+    public void setCoverImageUrl(String coverImageUrl) { this.coverImageUrl = coverImageUrl; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
