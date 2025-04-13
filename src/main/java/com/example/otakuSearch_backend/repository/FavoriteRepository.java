@@ -9,5 +9,8 @@ import java.util.List;
 
 @Repository
 public interface FavoriteRepository extends JpaRepository<Favorites, Long> {
-    List<Favorites> findByUser(Users user); // Fetch all favorites for a given user
+    List<Favorites> findByUser_UserId(Long userId); // Fetch all favorites for a given user
+
 }
+
+
