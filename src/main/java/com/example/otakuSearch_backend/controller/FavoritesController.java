@@ -6,7 +6,10 @@ import com.example.otakuSearch_backend.models.Favorites;
 import com.example.otakuSearch_backend.models.Users;
 import com.example.otakuSearch_backend.service.FavoritesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.*;
@@ -39,12 +42,34 @@ public class FavoritesController {
         // Convert each Favorites entity into a lightweight DTO
         return favorites.stream()
             .map(fav -> new FavoriteAnimeDTO(
+                fav.getFavoriteId(),
                 fav.getAnimeId(),
                 fav.getTitle(),
                 fav.getCoverImageUrl()
             ))
             .collect(Collectors.toList());
     }
+
+    /**
+     * ❌ DELETE /users/{userId}/favorites/{favoriteId}
+     * 
+     * Handles a DELETE request to remove a specific favorite anime for a user.
+     * 
+     * @param favoriteId The unique ID of the favorite anime to be deleted
+     * @return HTTP 200 OK response upon successful deletion
+     */
+    @DeleteMapping("/{favoriteId}")
+    public ResponseEntity<?> removeFavorite(@PathVariable Long favoriteId) {
+        // 🧼 Delegate deletion logic to the service layer
+        favoritesService.deleteFavoriteById(favoriteId);
+
+        System.out.println("✅ Favorite anime with ID " + favoriteId + " deleted successfully.");
+
+
+        // ✅ Return 200 OK with no body (indicates successful deletion)
+        return ResponseEntity.ok().build();
+    }
+
 
     /**
      * POST endpoint to add an anime to a user's favorites list.
@@ -54,16 +79,15 @@ public class FavoritesController {
      * @return The saved Favorites entity.
      */
     @PostMapping
-    public Favorites addToFavorites(@PathVariable Long userId, @RequestBody Favorites favorite) {
-        // 🧾 Log payload for debugging
-        System.out.println("📥 Received request to add favorite for userId: " + userId);
-        System.out.println("📦 Payload → animeId: " + favorite.getAnimeId() + ", title: " + favorite.getTitle());
-
-        // Retrieve user entity and associate it with the favorite
-        Users user = userService.getUserById(userId);
-        favorite.setUser(user);
-
-        // Save the favorite entry in the database
-        return favoritesService.addFavorite(favorite);
+    public ResponseEntity<?> addToFavorites(@PathVariable Long userId, @RequestBody Favorites favorite) {
+        try {
+            Users user = userService.getUserById(userId);
+            favorite.setUser(user);
+            Favorites saved = favoritesService.addFavorite(favorite);
+            return ResponseEntity.ok(saved);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(409).body(Map.of("error", e.getMessage())); // 409 Conflict
+        }
     }
+    
 }

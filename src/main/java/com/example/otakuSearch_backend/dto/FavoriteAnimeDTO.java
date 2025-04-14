@@ -7,6 +7,7 @@ package com.example.otakuSearch_backend.dto;
  */
 public class FavoriteAnimeDTO {
 
+    private Long favoriteId; // Unique ID of the User who likes the Anime
     private Long animeId;         // Unique ID of the anime
     private String title;         // Anime title (romaji or English)
     private String coverImageUrl; // URL for the cover image (used in mobile app)
@@ -18,13 +19,16 @@ public class FavoriteAnimeDTO {
      * @param title          Anime title (romaji or English)
      * @param coverImageUrl  URL of the anime's cover image
      */
-    public FavoriteAnimeDTO(Long animeId, String title, String coverImageUrl) {
+    public FavoriteAnimeDTO(Long favoriteId, Long animeId, String title, String coverImageUrl) {
+        this.favoriteId = favoriteId;
         this.animeId = animeId;
         this.title = title;
         this.coverImageUrl = coverImageUrl;
     }
 
     // Getters for serialization (required for Jackson to convert to JSON)
+
+    public Long getFavoriteId() { return favoriteId; }
 
     public Long getAnimeId() {
         return animeId;
