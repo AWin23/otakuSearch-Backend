@@ -84,10 +84,19 @@ public class FavoritesController {
             Users user = userService.getUserById(userId);
             favorite.setUser(user);
             Favorites saved = favoritesService.addFavorite(favorite);
-            return ResponseEntity.ok(saved);
+
+            FavoriteAnimeDTO responseDto = new FavoriteAnimeDTO(
+                saved.getFavoriteId(),
+                saved.getAnimeId(),
+                saved.getTitle(),
+                saved.getCoverImageUrl()
+            );
+
+            return ResponseEntity.ok(responseDto);
         } catch (IllegalStateException e) {
-            return ResponseEntity.status(409).body(Map.of("error", e.getMessage())); // 409 Conflict
+            return ResponseEntity.status(409).body(Map.of("error", e.getMessage()));
         }
     }
-    
+
+
 }

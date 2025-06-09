@@ -65,7 +65,7 @@ public class AniListService {
               }
             }
         """;
-        System.out.println("Fetching popular anime for season: " + season + ", year: " + year);
+        //System.out.println("Fetching popular anime for season: " + season + ", year: " + year);
         return graphQLService.executeQuery(query, Map.of("season", season, "year", year));
     }
 
@@ -95,7 +95,7 @@ public class AniListService {
           }
         }
       """;
-      System.out.println("Fetching upcoming anime for season: " + season + ", year: " + year);
+      //System.out.println("Fetching upcoming anime for season: " + season + ", year: " + year);
       return graphQLService.executeQuery(query, Map.of("season", season, "year", year));
   }
 
@@ -122,7 +122,7 @@ public class AniListService {
           }
         }
     """;
-    System.out.println("Fetching All-time anime for season: ");
+    //System.out.println("Fetching All-time anime for season: ");
     return graphQLService.executeQuery(query, Map.of());
 }
 
@@ -196,7 +196,7 @@ public Mono<Map<String, Object>> getTop100Anime() {
       }
     """;
 
-    System.out.println("Fetching Specific Anime Details: ");
+    //System.out.println("Fetching Specific Anime Details: ");
 
     return graphQLService.executeQuery(query, Map.of("id", id))
     .map(result -> {
